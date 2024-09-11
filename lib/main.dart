@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:webrtc_demo/firebase_options.dart';
 import 'package:webrtc_demo/firebase_service/firebase_api.dart';
 import 'package:webrtc_demo/views/call_page.dart';
+import 'package:webrtc_demo/views/demo_e2ee.dart';
 import 'package:webrtc_demo/views/webrtc_page.dart';
 
 void main() async {
@@ -53,7 +54,7 @@ class HomePage extends StatelessWidget {
                 MaterialPageRoute(builder: (context) => const CallingPage2(typeUser: TypeUser.answer,)),
               );
             },
-            child: Text('Receive Call'),
+            child: const Text('Receive Call'),
           ),
           ElevatedButton(
             onPressed: () {
@@ -63,6 +64,15 @@ class HomePage extends StatelessWidget {
               );
             },
             child: Text('WebRTC test call'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => LoopBackSampleUnifiedTracks()),
+              );
+            },
+            child: Text('LoopBackSampleUnifiedTracks'),
           ),
         ],
       ),
