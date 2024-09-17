@@ -16,6 +16,7 @@ class CallingPage2 extends HookWidget {
   Widget build(BuildContext context) {
     final peerConnection = useState<RTCPeerConnection?>(null);
     final localStream = useState<MediaStream?>(null);
+    final remoteStream = useState<MediaStream?>(null);
     final localRenderer = useMemoized(() => RTCVideoRenderer());
     final remoteRenderer = useMemoized(() => RTCVideoRenderer());
     final signalingManager = useMemoized(() => SignalingManager('call_id')); //your id
@@ -28,7 +29,6 @@ class CallingPage2 extends HookWidget {
       await localRenderer.initialize();
       await remoteRenderer.initialize();
     }
-
     void registerPeerConnectionListeners(){
       peerConnection.value?.onIceCandidate = (candidate) {
         print("SEND IceCandidate : ${candidate.toString()}");
@@ -114,7 +114,6 @@ class CallingPage2 extends HookWidget {
             // },
           ],
         };
-
         peerConnection.value = await createPeerConnection(configuration);
 
         localStream.value?.getTracks().forEach((track) {
@@ -146,11 +145,54 @@ class CallingPage2 extends HookWidget {
             },
           );
 
+          // signalingManager.getCandidatesAddedToRoomStream( listenCaller: false,selfId: typeUser.name).listen(
+          //       (candidates) {
+          //     for (final candidate in candidates) {
+          //       if(!addedCandidates.contains(candidate)){
+          //         peerConnection.value?.addCandidate(candidate);
+          //         addedCandidates.add(candidate);
+          //         print('OFFER Added ICE CANDIDATE: ${candidate.candidate}, ${candidate.sdpMid}, ${candidate.sdpMLineIndex}');
+          //       }
+          //     }
+          //   },
+          // );
+
           final offer = await peerConnection.value?.createOffer();
           peerConnection.value?.setLocalDescription(offer!);
           signalingManager.sendOffer(offer!);
         }
         else{
+          // final callerCandidate = await signalingManager.getCandidatesAddedToRoomStream(
+          //     listenCaller: true,
+          //     selfId: typeUser.name
+          // ).first;
+          // if (callerCandidate.isNotEmpty) {
+          //   print('GET ICE CANDIDATE FIRST: ${callerCandidate.toString()}');
+          //   int i = 0;
+          //   for (final candidate in callerCandidate) {
+          //     if(!addedCandidates.contains(candidate)){
+          //       peerConnection.value?.addCandidate(candidate);
+          //       addedCandidates.add(candidate);
+          //       print('ANSWER ADDED ICE CANDIDATE [$i]: ${candidate.candidate}, ${candidate.sdpMid}, ${candidate.sdpMLineIndex}');
+          //     }
+          //     i++;
+          //   }
+          // }
+
+          // signalingManager.getCandidatesStream(selfId: typeUser.name).listen(
+          //       (candidates) {
+          //     int i =0;
+          //     for (final candidate in candidates) {
+          //       if(!addedCandidates.contains(candidate)){
+          //         peerConnection.value?.addCandidate(candidate);
+          //         addedCandidates.add(candidate);
+          //         print('ANSWER ADDED ICE CANDIDATE [$i]: ${candidate.toString()}');
+          //       }
+          //       i++;
+          //     }
+          //   },
+          // );
+
           final listCandidate = await signalingManager.getCandidates(selfId: typeUser.name);
           int i =0;
           for (final candidate in listCandidate) {
@@ -179,7 +221,7 @@ class CallingPage2 extends HookWidget {
         remoteRenderer.dispose();
         peerConnection.value?.dispose();
         localStream.value?.dispose();
-        addedCandidates.clear();
+        remoteStream.value?.dispose();
       };
     }, []);
 
@@ -190,8 +232,7 @@ class CallingPage2 extends HookWidget {
           Expanded(child: RTCVideoView(localRenderer)),
           Expanded(child: RTCVideoView(remoteRenderer)),
           ElevatedButton(
-            onPressed: () async {
-              await signalingManager.removeRoomCall();
+            onPressed: () {
               Navigator.pop(context);
             },
             child: const Text('Hang Up'),

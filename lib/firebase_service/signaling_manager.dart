@@ -39,6 +39,7 @@ class SignalingManager {
 
     final convertedStream = snapshots.map(
           (snapshot) {
+        // Chuyển đổi danh sách các thay đổi thành danh sách ICE candidates
         return snapshot.docs.map((doc) {
           final data = doc.data() as Map<String, dynamic>;
           return RTCIceCandidate(
@@ -78,6 +79,7 @@ class SignalingManager {
       return [];
     }
   }
+
 
   Future<RTCSessionDescription?> getOfferIfExists() async {
     try {
