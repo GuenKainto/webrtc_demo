@@ -732,7 +732,7 @@ class _MyAppState extends State<LoopBackSampleUnifiedTracks> {
                 ),
                 Row(
                   children: [
-                    Text('audio encrypt:'),
+                    const Text('audio encrypt:'),
                     Switch(
                         value: _audioEncrypt,
                         onChanged: (value) {
@@ -741,7 +741,7 @@ class _MyAppState extends State<LoopBackSampleUnifiedTracks> {
                             _enableEncryption(video: false, enabled: _audioEncrypt);
                           });
                         }),
-                    Text('video encrypt:'),
+                    const Text('video encrypt:'),
                     Switch(
                         value: _videoEncrypt,
                         onChanged: (value) {

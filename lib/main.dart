@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:webrtc_demo/firebase_options.dart';
 import 'package:webrtc_demo/firebase_service/firebase_api.dart';
+import 'package:webrtc_demo/views/call_e2ee_page.dart';
 import 'package:webrtc_demo/views/call_page.dart';
 import 'package:webrtc_demo/views/demo_e2ee.dart';
 import 'package:webrtc_demo/views/webrtc_page.dart';
@@ -38,6 +39,24 @@ class HomePage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const CallingPageE2EE(typeUser: TypeUser.caller,)),
+              );
+            },
+            child: const Text('Start Call E2EE'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const CallingPageE2EE(typeUser: TypeUser.answer,)),
+              );
+            },
+            child: const Text('Receive Call E2EE'),
+          ),
           ElevatedButton(
             onPressed: () {
               Navigator.push(
