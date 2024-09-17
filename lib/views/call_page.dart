@@ -75,7 +75,30 @@ class CallingPage2 extends HookWidget {
 
         final configuration = {
           'iceServers': [
-            {'urls': 'stun:stun.l.google.com:19302'}, // STUN server
+            {'urls': 'stun:stun.l.google.com:19302'},
+            {
+              'urls': "stun:stun.relay.metered.ca:80",
+            },
+            {
+              'urls': "turn:global.relay.metered.ca:80",
+              'username': "c75bac6c8054cf2a48c61532",
+              'credential': "t51KcvUcf2lIvjnA",
+            },
+            {
+              "urls": "turn:global.relay.metered.ca:80?transport=tcp",
+              "username": "c75bac6c8054cf2a48c61532",
+              "credential": "t51KcvUcf2lIvjnA",
+            },
+            {
+              "urls": "turn:global.relay.metered.ca:443",
+              "username": "c75bac6c8054cf2a48c61532",
+              "credential": "t51KcvUcf2lIvjnA",
+            },
+            {
+              "urls": "turns:global.relay.metered.ca:443?transport=tcp",
+              "username": "c75bac6c8054cf2a48c61532",
+              "credential": "t51KcvUcf2lIvjnA",
+            },
           ]
         };
         peerConnection.value = await createPeerConnection(configuration);

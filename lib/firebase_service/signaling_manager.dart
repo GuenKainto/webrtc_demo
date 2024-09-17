@@ -151,4 +151,13 @@ class SignalingManager {
       return null;
     });
   }
+
+  Future<void> removeRoomCall() async {
+    try {
+      await _firestore.collection('calls').doc(_callId).delete();
+      print('Room call removed successfully.');
+    } catch (e) {
+      print('Failed to remove room call: $e');
+    }
+  }
 }
