@@ -24,6 +24,8 @@ class CallingPageE2EE extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final enableEncrypt = useState(true);
+    final enableDecrypt = useState(true);
     String audioDropdownValue = audioCodecList.first;
     String videoDropdownValue = videoCodecList.first;
     final peerConnection = useState<RTCPeerConnection?>(null);
@@ -289,10 +291,10 @@ class CallingPageE2EE extends HookWidget {
           signalingManager.sendAnswer(answer!);
         }
 
-        _enableEncryption(enabled: true,video: true);
-        _enableEncryption(enabled: true,video: false);
-        _enableDecryption(enabled: true,video: true);
-        _enableDecryption(enabled: true,video: false);
+        _enableEncryption(enabled: enableEncrypt.value,video: true);
+        _enableEncryption(enabled: enableEncrypt.value,video: false);
+        _enableDecryption(enabled: enableDecrypt.value,video: true);  
+        _enableDecryption(enabled: enableDecrypt.value,video: false);
       }
       try{
         init();
@@ -314,6 +316,38 @@ class CallingPageE2EE extends HookWidget {
         children: [
           Expanded(child: RTCVideoView(localRenderer)),
           Expanded(child: RTCVideoView(remoteRenderer)),
+          Row(
+            children: [
+              Row(
+                children: [
+                  const Text('Enable encrypt'),
+                  Switch(
+                      value: enableEncrypt.value,
+                      activeColor: Colors.greenAccent,
+                      onChanged: (bool value) {
+                        enableEncrypt.value = !enableEncrypt.value;
+                        _enableEncryption(enabled: enableEncrypt.value,video: true);
+                        _enableEncryption(enabled: enableEncrypt.value,video: false);
+                      }
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  const Text('Enable decrypt'),
+                  Switch(
+                      value: enableDecrypt.value,
+                      activeColor: Colors.greenAccent,
+                      onChanged: (bool value) {
+                        enableDecrypt.value = !enableDecrypt.value;
+                        _enableDecryption(enabled: enableDecrypt.value,video: true);
+                        _enableDecryption(enabled: enableDecrypt.value,video: false);
+                      }
+                  ),
+                ],
+              ),
+            ],
+          ),
           ElevatedButton(
             onPressed: () async {
               await signalingManager.removeRoomCall();

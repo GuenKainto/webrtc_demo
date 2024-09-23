@@ -232,7 +232,8 @@ class CallingPage2 extends HookWidget {
           Expanded(child: RTCVideoView(localRenderer)),
           Expanded(child: RTCVideoView(remoteRenderer)),
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
+              await signalingManager.removeRoomCall();
               Navigator.pop(context);
             },
             child: const Text('Hang Up'),
